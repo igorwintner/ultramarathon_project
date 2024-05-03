@@ -372,12 +372,14 @@ Subtract the athlete's year of birth from 2022 and create a new column 'athlete_
 df2['athlete_age'] = 2022 - df2['Athlete year of birth']
 ```
 
+
 # Remove 'h' from Athlete performance column
 
 
 ```python
 df2['Athlete performance'] = df2['Athlete performance'].str.split(' ').str.get(0)
 ```
+
 
 # Drop columns: Athlete club, Athlete age category, Athlete year of birth
 
@@ -941,6 +943,20 @@ plt.figure(figsize=(18, 7))
 sns.histplot(df3, x='race_length', hue='athlete_gender')
 ```
 
+
+
+
+
+    <Axes: xlabel='race_length', ylabel='Count'>
+
+
+
+
+    
+![png](output_47_2.png)
+    
+
+
 As we can see, in the shortest ultramarton races (50 km) the distribution between women and men is very even. For longer races (e.g. 100 km or even more) there is a much higher representation of male athletes. 
 
 
@@ -952,6 +968,13 @@ sns.histplot(df3[df3['race_length'] == '100km']['athlete_avg_speed'], ax=axs[1])
 axs[1].set_title('Race Length: 100km')
 plt.tight_layout()
 ```
+
+
+
+    
+![png](output_49_1.png)
+    
+
 
 In 2022, the two most common types of ultramarathon races in the Czech Republic and Slovakia were 50 km and 100 km. In the distibution chart we can see the average speed in 50 km and 100 km races. Athletes most often ran the 50 km race with almost twice the average speed. 
 
@@ -985,7 +1008,7 @@ sns.lmplot(df3, x='athlete_age', y='athlete_avg_speed', hue='athlete_gender')
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x128ad878f90>
+    <seaborn.axisgrid.FacetGrid at 0x1dba10d6e50>
 
 
 
