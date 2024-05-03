@@ -8,6 +8,7 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import plotly.express as px
 ```
 
 # Create dataframe
@@ -16,6 +17,8 @@ import matplotlib.pyplot as plt
 ```python
 df = pd.read_csv('ultra_marathon_data.csv')
 ```
+
+    
 
 # Discover the data, that has been imported 
 
@@ -27,7 +30,20 @@ df.head()
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -210,7 +226,20 @@ df[(df['Event name'].str.contains('CZE|SVK')) & (df['Year of event'] == 2022)].h
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -347,6 +376,7 @@ df2['athlete_age'] = 2022 - df2['Athlete year of birth']
 ```
 
 
+
 # Remove 'h' from Athlete performance column
 
 
@@ -354,6 +384,8 @@ df2['athlete_age'] = 2022 - df2['Athlete year of birth']
 df2['Athlete performance'] = df2['Athlete performance'].str.split(' ').str.get(0)
 ```
 
+
+    
 
 # Drop columns: Athlete club, Athlete age category, Athlete year of birth
 
@@ -395,7 +427,20 @@ df2[df2['athlete_age'].isna()==True].head()
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -507,7 +552,20 @@ df2[df2.duplicated() == True]
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -544,7 +602,20 @@ df2.reset_index(drop=True)
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -820,7 +891,20 @@ df3.head(1)
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -866,6 +950,8 @@ sns.histplot(df3, x='race_length', hue='athlete_gender')
 ```
 
 
+    
+
 
 
 
@@ -891,6 +977,8 @@ axs[1].set_title('Race Length: 100km')
 plt.tight_layout()
 ```
 
+
+    
 
 
     
@@ -930,7 +1018,7 @@ sns.lmplot(df3, x='athlete_age', y='athlete_avg_speed', hue='athlete_gender')
 
 
 
-    <seaborn.axisgrid.FacetGrid at 0x1dba10d6e50>
+    <seaborn.axisgrid.FacetGrid at 0x1fb337fb190>
 
 
 
@@ -941,6 +1029,55 @@ sns.lmplot(df3, x='athlete_age', y='athlete_avg_speed', hue='athlete_gender')
 
 
 Above we can see a linear graph between the age of the athlete and the average speed of the athlete in all types of races. Of course, the average speed decreases with age for both women and men.
+
+Age groups of the athletes in all races in 2022.
+
+
+```python
+def age_group(x):
+    if(x<20):
+        return 'Less than 20'
+    elif (x>=20 and x<=30):
+        return '20 to 30'
+    elif (x>30 and x<=40):
+        return '31 to 40'
+    elif (x>40 and x<=50 ):
+        return '41 to 50'
+    else :
+        return 'upper 50'
+    
+
+
+df3['age_cat'] = df3['athlete_age'].apply(age_group)
+```
+
+
+```python
+ag = df3.age_cat.value_counts()
+ag
+```
+
+
+
+
+    age_cat
+    41 to 50        970
+    31 to 40        854
+    upper 50        441
+    20 to 30        250
+    Less than 20      9
+    Name: count, dtype: int64
+
+
+
+We can see that in 2022 the most frequent runners were athletes in the age group from 41 to 50 years, followed by the 31 to 40 age group. There were not even 1% of athletes under 20 years of age.
+
+
+```python
+px.pie(names=ag.index,values=ag.values,hole=.5)
+```
+![alt text](output_55_1.png)
+
 
 # Questions I want to find out from the data
 
@@ -977,7 +1114,20 @@ df_filtered.query('race_length == "100km"').groupby(
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1095,7 +1245,20 @@ df3.head()
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1204,7 +1367,20 @@ df3.groupby('race_season')['athlete_avg_speed'].agg(['mean', 'count']).sort_valu
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1257,7 +1433,20 @@ df3.query('race_length == "50km"').groupby('race_season')['athlete_avg_speed'].a
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1301,7 +1490,20 @@ df3.query('race_length == "100km"').groupby('race_season')['athlete_avg_speed'].
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
