@@ -24,6 +24,23 @@ df = pd.read_csv('ultra_marathon_data.csv')
 df.head()
 ```
 
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -142,6 +159,8 @@ df.shape
 
 
 
+The dataset contains over 7 million records between 1798 and 2022!
+
 
 ```python
 df.dtypes
@@ -167,8 +186,34 @@ df.dtypes
 
 
 
+
+```python
+df_2022 = df[df['Year of event'] == 2022]
+```
+
+
+```python
+df_2022['Event name'].str.split('(').str.get(1).str.split(')').str.get(0).value_counts().head(10).plot(
+    kind='bar',title='No of Events in each country in 2022',ylabel='Count',xlabel='Country',color='lightblue',figsize=(10,5))
+```
+
+
+
+
+    <Axes: title={'center': 'No of Events in each country in 2022'}, xlabel='Country', ylabel='Count'>
+
+
+
+
+    
+![png](output_11_1.png)
+    
+
+
+The chart above shows the ultramarathon races in 2022 by the countries in which they were held. The USA has the highest representation with just over 100k races, France second with also almost 100k races.
+
 # Clean up data
-Only want Races in the Czech Republic or Slovakia in 2022
+Only want Races in the Czech Republic or Slovakia in 2022.
 
 
 ```python
@@ -178,7 +223,20 @@ df[(df['Event name'].str.contains('CZE|SVK')) & (df['Year of event'] == 2022)].h
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -304,14 +362,15 @@ df2.shape
 
 
 
+Now we have 2537 records for the races only in the Czech Republic or Slovakia in 2022.
+
 # Clean up athlete age
-Subtract the athlete's year of birth from 2022 and create a new column 
+Subtract the athlete's year of birth from 2022 and create a new column 'athlete_age'.
 
 
 ```python
 df2['athlete_age'] = 2022 - df2['Athlete year of birth']
 ```
-    
 
 # Remove 'h' from Athlete performance column
 
@@ -319,8 +378,6 @@ df2['athlete_age'] = 2022 - df2['Athlete year of birth']
 ```python
 df2['Athlete performance'] = df2['Athlete performance'].str.split(' ').str.get(0)
 ```
-
-
 
 # Drop columns: Athlete club, Athlete age category, Athlete year of birth
 
@@ -362,6 +419,20 @@ df2[df2['athlete_age'].isna()==True].head()
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -461,6 +532,8 @@ df2[df2['athlete_age'].isna()==True].head()
 df2 = df2.dropna()
 ```
 
+Here it was necessary to remove records that did not contain any data (null values) in order to convert 'athlete_age' to integer.
+
 # Check for duplicates
 
 
@@ -469,6 +542,22 @@ df2[df2.duplicated() == True]
 ```
 
 
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -493,6 +582,8 @@ df2[df2.duplicated() == True]
 
 
 
+We have no duplicate records in the data.
+
 # Reset index
 
 
@@ -503,7 +594,20 @@ df2.reset_index(drop=True)
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -741,8 +845,10 @@ df2.dtypes
 
 
 
+Convert 'athlete_age' to integer and 'Athlete average speed' to float.
+
 # Rename columns
-Remove spaces and in lowercase
+Remove spaces and in lowercase, because it's clearer and much easier to work with in the future.
 
 
 ```python
@@ -767,6 +873,8 @@ df3 = df2[['race_day', 'race', 'race_length', 'race_no_of_finishers',
            ]]
 ```
 
+I also rearranged the columns to make it make more sense and removed the 'year' column because the dataset now only covers races in 2022, so it was redundant.
+
 
 ```python
 df3.head(1)
@@ -775,7 +883,20 @@ df3.head(1)
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -820,16 +941,6 @@ plt.figure(figsize=(18, 7))
 sns.histplot(df3, x='race_length', hue='athlete_gender')
 ```
 
-
-
-
-
-
-    
-![png](output_38_2.png)
-    
-
-
 As we can see, in the shortest ultramarton races (50 km) the distribution between women and men is very even. For longer races (e.g. 100 km or even more) there is a much higher representation of male athletes. 
 
 
@@ -841,15 +952,6 @@ sns.histplot(df3[df3['race_length'] == '100km']['athlete_avg_speed'], ax=axs[1])
 axs[1].set_title('Race Length: 100km')
 plt.tight_layout()
 ```
-
-
-    
-
-
-    
-![png](output_40_1.png)
-    
-
 
 In 2022, the two most common types of ultramarathon races in the Czech Republic and Slovakia were 50 km and 100 km. In the distibution chart we can see the average speed in 50 km and 100 km races. Athletes most often ran the 50 km race with almost twice the average speed. 
 
@@ -869,26 +971,35 @@ sns.violinplot(data=df_filtered, x='race_length', y='athlete_avg_speed',
 
 
     
-![png](output_42_1.png)
+![png](output_51_1.png)
     
 
 
-From this graph we can see that men are faster especially in the shorter 50 km race. However, for the 100 km race, the average speeds for female and male athletes are much more equal, with women often able to run better times than men
+From this graph we can see that men are faster especially in the shorter 50 km race. However, for the 100 km race, the average speeds for female and male athletes are much more equal, where women are often able to run similar or better times than men.
 
 
 ```python
 sns.lmplot(df3, x='athlete_age', y='athlete_avg_speed', hue='athlete_gender')
 ```
- 
-![png](output_44_1.png)
+
+
+
+
+    <seaborn.axisgrid.FacetGrid at 0x128ad878f90>
+
+
+
+
+    
+![png](output_53_1.png)
     
 
 
-Above we can see a linear graph between the age of the athlete and the average speed of the athlete in all types of races. 
+Above we can see a linear graph between the age of the athlete and the average speed of the athlete in all types of races. Of course, the average speed decreases with age for both women and men.
 
 # Questions I want to find out from the data
 
-1. Difference in speed for the 50 km, 100 km, male to female
+### 1. Difference in speed for the 50 km, 100 km, male to female
 
 
 ```python
@@ -907,9 +1018,9 @@ df_filtered.groupby(['athlete_gender', 'race_length'])['athlete_avg_speed'].mean
 
 
 
-The results show that for very long distances such as 100 km, women and men have very equal times, with women having a higher average speed. However, for the 50 km race, men dominate and the difference in average speed is slightly more noticeable. 
+The results show that for very long distances such as 100 km, women and men have very equal times, with men having only a bit higher average speed. However, for the 50 km race, men dominate and the difference in average speed is slightly more noticeable. 
 
-2. What age groups are the best in the 100 km race (10 + races)
+### 2. What age groups are the best in the 100 km race (10 + races)
 
 
 ```python
@@ -921,7 +1032,20 @@ df_filtered.query('race_length == "100km"').groupby(
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1009,7 +1133,7 @@ df_filtered.query('race_length == "100km"').groupby(
 
 From the results we can see that the most successful competitors over the longest distances are around 40 years old. For very long distances, experience and strategy play a key role. 
 
-3. Are athletes slower in summer than winter?
+### 3. Are athletes slower in summer than winter?
 
 Spring 3-5
 
@@ -1039,7 +1163,20 @@ df3.head()
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1148,7 +1285,20 @@ df3.groupby('race_season')['athlete_avg_speed'].agg(['mean', 'count']).sort_valu
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1201,7 +1351,20 @@ df3.query('race_length == "50km"').groupby('race_season')['athlete_avg_speed'].a
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -1245,7 +1408,20 @@ df3.query('race_length == "100km"').groupby('race_season')['athlete_avg_speed'].
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
