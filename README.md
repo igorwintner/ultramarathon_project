@@ -17,10 +17,6 @@ import matplotlib.pyplot as plt
 df = pd.read_csv('ultra_marathon_data.csv')
 ```
 
-    C:\Users\uzivatel\AppData\Local\Temp\ipykernel_50232\1349798841.py:1: DtypeWarning: Columns (11) have mixed types. Specify dtype option on import or set low_memory=False.
-      df = pd.read_csv('ultra_marathon_data.csv')
-    
-
 # Discover the data, that has been imported 
 
 
@@ -345,13 +341,6 @@ Subtract the athlete's year of birth from 2022 and create a new column
 ```python
 df2['athlete_age'] = 2022 - df2['Athlete year of birth']
 ```
-
-    C:\Users\uzivatel\AppData\Local\Temp\ipykernel_50232\71848663.py:1: SettingWithCopyWarning: 
-    A value is trying to be set on a copy of a slice from a DataFrame.
-    Try using .loc[row_indexer,col_indexer] = value instead
-    
-    See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-      df2['athlete_age'] = 2022 - df2['Athlete year of birth']
     
 
 # Remove 'h' from Athlete performance column
@@ -361,13 +350,7 @@ df2['athlete_age'] = 2022 - df2['Athlete year of birth']
 df2['Athlete performance'] = df2['Athlete performance'].str.split(' ').str.get(0)
 ```
 
-    C:\Users\uzivatel\AppData\Local\Temp\ipykernel_50232\2477507555.py:1: SettingWithCopyWarning: 
-    A value is trying to be set on a copy of a slice from a DataFrame.
-    Try using .loc[row_indexer,col_indexer] = value instead
-    
-    See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-      df2['Athlete performance'] = df2['Athlete performance'].str.split(' ').str.get(0)
-    
+
 
 # Drop columns: Athlete club, Athlete age category, Athlete year of birth
 
@@ -923,14 +906,7 @@ plt.figure(figsize=(18, 7))
 sns.histplot(df3, x='race_length', hue='athlete_gender')
 ```
 
-    c:\Users\uzivatel\anaconda3\Lib\site-packages\seaborn\_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
-      with pd.option_context('mode.use_inf_as_na', True):
-    
 
-
-
-
-    <Axes: xlabel='race_length', ylabel='Count'>
 
 
 
@@ -952,10 +928,7 @@ axs[1].set_title('Race Length: 100km')
 plt.tight_layout()
 ```
 
-    c:\Users\uzivatel\anaconda3\Lib\site-packages\seaborn\_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
-      with pd.option_context('mode.use_inf_as_na', True):
-    c:\Users\uzivatel\anaconda3\Lib\site-packages\seaborn\_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
-      with pd.option_context('mode.use_inf_as_na', True):
+
     
 
 
@@ -992,16 +965,7 @@ From this graph we can see that men are faster especially in the shorter 50 km r
 ```python
 sns.lmplot(df3, x='athlete_age', y='athlete_avg_speed', hue='athlete_gender')
 ```
-
-
-
-
-    <seaborn.axisgrid.FacetGrid at 0x128ad878f90>
-
-
-
-
-    
+ 
 ![png](output_44_1.png)
     
 
